@@ -37,9 +37,14 @@ delta_lake[j] <- exp(trait[j,2])
 h_lake[j] <- trait[j,3]
 l0_lake[j] <- trait[j,4]
 t1_lake[j] <- l0_lake[j]/-h_lake[j]
+<<<<<<< HEAD:JAGS model/Appendix S3 - JAGS model.jags
 T_lake[j] <- (L50_lake[j]/h_lake[j] + t1_lake[j]) # subtract growth rate from size-at-maturity since maturity occurs 1 growing season prior to observing maturity
 g_lake[j] <- max(0.001,min(exp(trait[j,5]),3*h_lake[j]/L50_lake[j]))
 M_lake[j] <- -log(((g_lake[j]/1.18)-1)/-1)
+=======
+T_lake[j] <- (L50_lake[j]/h_lake[j] + t1_lake[j])
+g_lake[j] <- max(0.001,min(exp(trait[j,5]),3*h_lake[j]/L50_lake[j])) # bounded parameter
+>>>>>>> origin/master:JAGS model/biphasicMVN.jags
 }
 
 for(m in 1:Ngroup_mat) {
