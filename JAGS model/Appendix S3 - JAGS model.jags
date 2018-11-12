@@ -20,45 +20,40 @@ pred[i] <- ifelse(age[i]<=T_lake[Lake[i]],juv[i],adult[i])
 for(j in 1:Nlake) {
 
 # normal linear regression predict trends in posterior of life-history trait i based on covariates
-mu[j,1] <- wL50[1]*beta_L50[1]*prod[j] + wL50[2]*beta_L50[2]*summer[j] + wL50[3]*beta_L50[3]*whitefish[j] + wL50[4]*beta_L50[4]*exploited[j] + log(L50)
+mu[j,1] <- wL50[1]*beta_L50[1]*prod[j] + wL50[2]*beta_L50[2]*summer[j] + wL50[3]*beta_L50[3]*whitefish[j] + wL50[4]*beta_L50[4]*exploited[j] + (L50)
 
-mu[j,2] <- log(delta)
+mu[j,2] <- (delta)
 
 mu[j,3] <- max(0,wh[1]*beta_h[1]*prod[j] + wh[2]*beta_h[2]*summer[j] + wh[3]*beta_h[3]*whitefish[j] + wh[4]*beta_h[4]*exploited[j] + h)
 
 mu[j,4] <- l0
 
-mu[j,5] <- max(log(0.001),min(log(wg[1]*beta_g[1]*prod[j] + wg[2]*beta_g[2]*summer[j] + wg[3]*beta_g[3]*whitefish[j] + wg[4]*beta_g[4]*exploited[j] + g),log(3*mu[j,3]/exp(mu[j,1]))))
+mu[j,5] <- max(log(0.001),min(log(wg[1]*beta_g[1]*prod[j] + wg[2]*beta_g[2]*summer[j] + wg[3]*beta_g[3]*whitefish[j] + wg[4]*beta_g[4]*exploited[j] + g),log(3*mu[j,3]/mu[j,1])))
 
 trait[j,1:5] ~ dmnorm(mu[j,],tauMVN)
 
-L50_lake[j] <- exp(trait[j,1])
-delta_lake[j] <- exp(trait[j,2])
+L50_lake[j] <- (trait[j,1])
+delta_lake[j] <- (trait[j,2])
 h_lake[j] <- trait[j,3]
 l0_lake[j] <- trait[j,4]
 t1_lake[j] <- l0_lake[j]/-h_lake[j]
-<<<<<<< HEAD:JAGS model/Appendix S3 - JAGS model.jags
 T_lake[j] <- (L50_lake[j]/h_lake[j] + t1_lake[j]) # subtract growth rate from size-at-maturity since maturity occurs 1 growing season prior to observing maturity
 g_lake[j] <- max(0.001,min(exp(trait[j,5]),3*h_lake[j]/L50_lake[j]))
 M_lake[j] <- -log(((g_lake[j]/1.18)-1)/-1)
-=======
-T_lake[j] <- (L50_lake[j]/h_lake[j] + t1_lake[j])
-g_lake[j] <- max(0.001,min(exp(trait[j,5]),3*h_lake[j]/L50_lake[j])) # bounded parameter
->>>>>>> origin/master:JAGS model/biphasicMVN.jags
 }
 
 for(m in 1:Ngroup_mat) {
-  beta_L50[m] ~ dnorm(0,0.01)
-  wL50[m] ~ dbern(0.1)
-  beta_h[m] ~ dnorm(0,0.01)
-  wh[m] ~ dbern(0.1)
-  beta_g[m] ~ dnorm(0,0.01)
-  wg[m] ~ dbern(0.1)
+  beta_L50[m] ~ dnorm(0,0.001)
+  wL50[m] ~ dbern(0.5)
+  beta_h[m] ~ dnorm(0,0.001)
+  wh[m] ~ dbern(0.5)
+  beta_g[m] ~ dnorm(0,0.001)
+  wg[m] ~ dbern(0.5)
 }
 
 # hyper priors
-gl_Trait[1] <- log(globalMean[1])
-gl_Trait[2] <- log(globalMean[2])
+gl_Trait[1] <- (globalMean[1])
+gl_Trait[2] <- (globalMean[2])
 gl_Trait[3] <- globalMean[3]
 gl_Trait[4] <- globalMean[4]
 gl_Trait[5] <- max(log(0.001),min(globalMean[5],log(3*globalMean[3]/globalMean[4])))
@@ -66,8 +61,8 @@ gl_Trait[5] <- max(log(0.001),min(globalMean[5],log(3*globalMean[3]/globalMean[4
 tauMVN ~ dwish(covarTrait,Ktrait+1)
 sigmaTrait <- inverse(tauMVN)
 globalTrait ~ dmnorm(gl_Trait,tauMVN)
-L50 <- exp(globalTrait[1])
-delta <- exp(globalTrait[2])
+L50 <- (globalTrait[1])
+delta <- (globalTrait[2])
 h <- max(0,globalTrait[3])
 l0 <- globalTrait[4]
 log_g <- globalTrait[5]
